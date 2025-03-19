@@ -2,7 +2,7 @@
 ```mermaid
 flowchart TB
 
-Eval_field[評估現場是否安全]-->Protection[自身防護]-->Patients[確認傷患人數]-->1stEvaluation-->2ndEvaluation
+Eval_field[評估現場是否安全]-->Protection[自身防護]-->Patients[確認傷患人數]-->Trauma?
 
 subgraph 1stEvaluation[傷患初步評估]
   direction TB
@@ -85,8 +85,8 @@ end
 T_C--非創傷-->Em_case
 T_E-->Em_case
 Em_case{危急個案？}
-Em_case--Y-->Load&Go
-Em_case--N-->Stay&Play
+Em_case--Y-->Load&Go-->2ndEvaluation
+Em_case--N-->Stay&Play-->2ndEvaluation
 
 subgraph 2ndEvaluation[二次評估]
   生命徵象-->懷疑缺血性胸痛
