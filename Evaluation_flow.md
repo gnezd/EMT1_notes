@@ -1,5 +1,6 @@
 # 病患評估流程
 ```mermaid
+
 flowchart TB
 
 Eval_field[評估現場是否安全]-->Protection[自身防護]-->Patients[確認傷患人數]-->Trauma?
@@ -34,11 +35,12 @@ subgraph 1stEvaluation[傷患初步評估]
     T_Conciousness-->T_Neck-->T_X
   end
 
-  T_X-->T_A-->T_B-->T_C-->T_D-->T_E
+  T_X-->T_A-->T_B-->T_C
 
   subgraph T_A[A: Airway 呼吸道評估]
     A_evaluate{異物阻塞、雜音鼾聲？}--雜音-->Liquid[液體阻塞，抽吸]
-    A_evaluate--鼾聲-->Aux_airway[輔助呼吸道]--Pain_rxn[有意識/意識>否]-->鼻咽呼吸道
+    A_evaluate--鼾聲-->Aux_airway[輔助呼吸道]--有意識/意識>否-->Nasal_airway[鼻咽呼吸道
+    避免觸發嘔吐反應]
     Aux_airway--無意識-->需要口咽呼吸道
   end
 
@@ -50,12 +52,17 @@ subgraph 1stEvaluation[傷患初步評估]
 
   subgraph T_C[C: Circulation 循環評估]
     Radial_artery{橈動脈}--N-->Cartoid_artery{頸動脈}
+    Radial_artery--"Y
+      收縮壓 > 60 mm-Hg"-->Count_pulses[評估7~10秒
+        計算脈搏數]
+    Cartoid_artery--"Y
+      收縮壓 < 60 mm-Hg || 四肢循環受阻"-->Count_pulses
   end
-
+  T_C--"創傷"-->T_D-->T_E
   subgraph T_D[D: Disability 失能]
   end
 
-  subgraph T_D[E: Extended checks 輔助評估]
+  subgraph T_E[E: Extended checks 輔助評估]
   end
 
   subgraph Nontrauma_Eval[非創傷評估
@@ -69,12 +76,18 @@ subgraph 1stEvaluation[傷患初步評估]
   NT_Conciousness-->T_A
 end
 
-Cartoid_artery--N-->OCHA
-NT_Conciousness--無呼吸脈搏-->OCHA
-Agonal_breath--Y-->OCHA
+//Cartoid_artery--N-->OCHA
+Cartoid_artery--N-->叫2
+//NT_Conciousness--無呼吸脈搏-->OCHA
+//Agonal_breath--Y-->OCHA
 subgraph OCHA[OCHA]
   direction TB
-  叫1-->叫2-->壓-->電
+  叫1["叫
+    (主手確認病患意識)"]-->叫2["叫
+    援助(119)和AED"]-->壓[壓
+      壓胸]-->電[電
+        使用AED]
+  電--建議電擊-->實施電擊
 end
 
 A_evaluate--異物-->Away_obstruction
