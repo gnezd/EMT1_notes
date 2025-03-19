@@ -1,7 +1,7 @@
 # 病患評估流程
 ```mermaid
 flowchart TB
-Eval[評估現場是否安全]-->Protection[自身防護]-->Patients[確認傷患人數]-->Evaluation;
+Eval[評估現場是否安全]-->Protection[自身防護]-->Patients[確認傷患人數]-->Trauma?;
 
 subgraph Evaluation[傷患評估]
   direction TB
@@ -38,15 +38,20 @@ end
 
 subgraph T_A[A: 呼吸道評估]
   A_evaluate{異物阻塞、雜音鼾聲？}--雜音-->Liquid[液體阻塞，抽吸]
+  A_evaluate--異物-->Away_obstruction
   A_evaluate--鼾聲-->Aux_airway[輔助呼吸道]--Pain_rxn[有意識/意識>否]-->鼻咽呼吸道
   Aux_airway--無意識-->需要口咽呼吸道
+end
 
+subgraph T_B[呼吸狀態評估]
+Agonal_breath{瀕死呼吸？}--Y-->OCHA
+Agonal_breath--N-->深淺快慢
 end
 
 subgraph Nontrauma_Eval[非創傷評估
                         意識ABC]
   direction TB
-  NT_Conciousness-->T_A-->NT_B-->NT_C
+  NT_Conciousness-->T_A
 end
 
 subgraph OCHA[OCHA]
