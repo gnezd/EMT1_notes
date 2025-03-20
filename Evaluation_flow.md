@@ -5,7 +5,7 @@ flowchart TB
 
 Eval_field[評估現場是否安全]-->Protection[自身防護]-->Patients[確認傷患人數]-->Trauma?
 
-subgraph 1stEvaluation[傷患初步評估]
+subgraph Primary_survey[傷患初步評估]
   direction TB
   Trauma?{創傷?
           無證據為非創傷時
@@ -76,18 +76,23 @@ subgraph 1stEvaluation[傷患初步評估]
   NT_Conciousness-->T_A
 end
 
-//Cartoid_artery--N-->OCHA
 Cartoid_artery--N-->叫2
-//NT_Conciousness--無呼吸脈搏-->OCHA
-//Agonal_breath--Y-->OCHA
+NT_Conciousness--無呼吸脈搏-->叫2
+Agonal_breath--Y-->叫2
 subgraph OCHA[OCHA]
   direction TB
   叫1["叫
-    (主手確認病患意識)"]-->叫2["叫
-    援助(119)和AED"]-->壓[壓
-      壓胸]-->電[電
-        使用AED]
-  電--建議電擊-->實施電擊
+    主手確認病患意識"]
+  叫2["叫
+    副手請求旁人撥打119和取得AED
+    若為急救人員則啟動AED"]
+  壓[壓
+    主手壓胸 110 bpm]
+  電[電
+    副手安裝AED
+    開插貼電
+    ]
+  叫1-->叫2-->壓-->電--建議電擊-->實施電擊
 end
 
 A_evaluate--異物-->Away_obstruction
@@ -98,10 +103,15 @@ end
 T_C--非創傷-->Em_case
 T_E-->Em_case
 Em_case{危急個案？}
-Em_case--Y-->Load&Go-->2ndEvaluation
-Em_case--N-->Stay&Play-->2ndEvaluation
+適當轉送[適當轉送
+  三大急重症優先往合作醫院]
+就近轉送["就近轉送
+  鄰近中度級急救醫院優先
+  (區域醫院)"]
+Em_case--Y-->適當轉送-->Secondary_survey
+Em_case--N-->就近轉送-->Secondary_survey
 
-subgraph 2ndEvaluation[二次評估]
+subgraph Secondary_survey[二次評估]
   生命徵象-->懷疑缺血性胸痛
   生命徵象-->懷疑中風
 end
