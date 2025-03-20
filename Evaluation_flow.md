@@ -45,6 +45,7 @@ subgraph Primary_survey[傷患初步評估]
   end
 
   subgraph T_B[B: Breath 呼吸狀態評估]
+    道力氣
     Agonal_breath{瀕死呼吸？}
     Agonal_breath--N-->深淺快慢
   end
@@ -87,16 +88,38 @@ subgraph OCHA[OCHA]
     副手請求旁人撥打119和取得AED
     若為急救人員則啟動AED"]
   壓[壓
-    主手壓胸 110 bpm]
+    主手壓胸 110 bpm
+    直到AED提示勿碰觸病人]
   電[電
     副手安裝AED
     開插貼電
     ]
-  叫1-->叫2-->壓-->電--建議電擊-->實施電擊
-end
+  通氣壓胸[主手持續壓胸/通氣
+    成人30:2
 
-A_evaluate--異物-->Away_obstruction
-subgraph Away_obstruction[異物梗塞流程]
+    副手準備BVM於通氣時使用
+    第一優先：面罩
+    第二優先：口咽呼吸道
+    空檔接上儲氣袋及氧氣15L/min
+    再詢問病史]
+  AED_analyze{分析心律
+    離開病患，換手
+    副手以手勢指示離開與開始壓胸
+    主手雙手懸停預備壓胸}
+  Reassess_BC{重新評估脈搏呼吸}
+
+  叫1-->叫2-->壓-->AED_analyze
+  叫2-->電-->AED_analyze
+  AED_analyze--建議電擊-->實施電擊-->通氣壓胸-->AED_analyze
+  AED_analyze--不建議電擊-->Reassess_BC
+  Reassess_BC--無心跳-->通氣壓胸
+end
+Reassess_BC--有心跳-->Oxygen_treatment
+通氣壓胸-->Oxy_installation_proc
+通氣壓胸-->Med_hist
+
+A_evaluate--異物-->Airway_obstruction
+subgraph Airway_obstruction[異物梗塞流程]
   站著腹戳--失去意識-->放倒胸戳
 end
 
@@ -104,16 +127,49 @@ T_C--非創傷-->Em_case
 T_E-->Em_case
 Em_case{危急個案？}
 適當轉送[適當轉送
-  三大急重症優先往合作醫院]
+  三大急重症:
+  重大創傷/急性腦中風/急性冠心症
+  優先往合作醫院]
 就近轉送["就近轉送
   鄰近中度級急救醫院優先
   (區域醫院)"]
 Em_case--Y-->適當轉送-->Secondary_survey
 Em_case--N-->就近轉送-->Secondary_survey
 
+
 subgraph Secondary_survey[二次評估]
   生命徵象-->懷疑缺血性胸痛
   生命徵象-->懷疑中風
 end
 
+subgraph Oxygen_treatment[氧氣治療]
+  Oxy_installation_proc[給氧裝置安裝程序
+  開看接開看
+  開主閥-看桶壓-接導管-開流量-看流量]
+
+Nasal_cannula
+Simple_mask
+NRM
+BVM
+end
+
+subgraph Airway_treatment[呼吸道處置]
+  徒手打開
+  輔助呼吸道
+  抽吸
+end
+Airway_treatment-->Airway_obstruction
+
+subgraph Med_hist[病史詢問]
+  主訴之前吃過藥敏感
+  Sample[SAMPLE
+  Sign
+  Allergies
+  Medications
+  Past illness
+  Last meal
+  Event]
+  OPQRST
+  增質轉嚴始
+end
 ```
