@@ -25,9 +25,9 @@ subgraph Primary_survey[傷患初步評估與急救]
   Trauma?{創傷?
           無證據為非創傷時
           認定創傷}--Y-->T_Neck-->Conciousness
+  BVM_on[使用BVM]
   Trauma?--N-->Conciousness
   Conciousness-->Agonal_breath[是否無呼吸或瀕死式呼吸]
-  Cartoid_artery--Y-->BVM-->Trauma?2
   Agonal_breath--Y-->Cartoid_artery{頸動脈博動}
   Agonal_breath--N-->Trauma?2{創傷?}--Y-->T_X
 
@@ -42,6 +42,7 @@ subgraph Primary_survey[傷患初步評估與急救]
     A_evaluate{異物阻塞、雜音鼾聲？}--雜音-->Liquid[液體阻塞，抽吸]
     A_evaluate--鼾聲-->Aux_airway[輔助呼吸道]--有意識/意識>否-->Nasal_airway[鼻咽呼吸道
     避免觸發嘔吐反應]
+    鼾聲-->手動打開呼吸道
     Aux_airway--無意識-->需要口咽呼吸道
   end
 
@@ -67,6 +68,7 @@ subgraph Primary_survey[傷患初步評估與急救]
 end
 
 Cartoid_artery{頸動脈博動}--N-->叫2
+Cartoid_artery--Y-->BVM_on-->Trauma?2
 subgraph OCHA[OCHA]
   direction TB
   叫1["叫
@@ -110,8 +112,8 @@ subgraph Airway_obstruction[異物梗塞流程]
   站著腹戳--失去意識-->放倒胸戳
 end
 
-T_C--非創傷-->問病史
-T_E-->問機轉-->問病史-->Em_case
+T_C--非創傷-->Med_hist
+T_E-->問機轉-->Med_hist-->Em_case
 Em_case{危急個案？}
 適當轉送[適當轉送
   三大急重症:
@@ -139,13 +141,6 @@ Simple_mask
 NRM
 BVM
 end
-
-subgraph Airway_treatment[呼吸道處置]
-  徒手打開
-  輔助呼吸道
-  抽吸
-end
-Airway_treatment-->Airway_obstruction
 
 subgraph Med_hist[病史詢問]
   主訴之前吃過藥敏感
