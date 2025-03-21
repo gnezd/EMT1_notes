@@ -1,0 +1,113 @@
+<head>
+  <title>土炮練習感受呼吸與心跳與標準CPR頻率</title>
+<style>
+  @keyframes pulse {
+    from {background-color: red;}
+    to {background-color: white;}
+  }
+
+  @keyframes move {
+    0% {top: 50px}
+    70% {top: 0px}
+    100% {top: 50px}
+  }
+
+  @keyframes cpr {
+    from {background-color: aqua;}
+    to {background-color: white;}
+  }
+
+  .pulsing_box {
+    position: relative;
+    top: 0px;
+    left: 60px;
+    animation-name: pulse;
+    animation-iteration-count: infinite;
+    width: 50;
+    height: 50;
+  }
+
+  .moving_box {
+    position: relative;
+    animation-name: move;
+    animation-iteration-count: infinite;
+    width: 50;
+    height: 50;
+    background-color: burlywood;
+  }
+
+  .cpr_box {
+    position: relative;
+    top: -65px;
+    left: 120px;
+    animation-name: cpr;
+    animation-iteration-count: infinite;
+    width: 100;
+    height: 50;
+  }
+
+  div > p {
+    position: relative;
+    top: 25%;
+    text-align: center;
+  }
+</style>
+
+<script>
+  function random_param(){
+    let pulse = Math.random() * 120 + 30 // HR 30 - 150
+    let breath = Math.random() * 35 + 5 // BPM 5 - 40
+    document.getElementById("T1").value = Math.floor(breath)
+    document.getElementById("T2").value = Math.floor(pulse)
+    ch1()
+    ch2()
+
+  }
+  
+  function ch1(){
+    let new_duration = 60.0 / document.querySelector("#T1").value
+    document.querySelector("#box1").setAttribute('style', 'animation-duration: ' + new_duration + 's;')
+  }
+
+  function ch2(){
+    let new_duration = 60.0 / document.querySelector("#T2").value
+    document.querySelector("#box2").setAttribute('style', 'animation-duration: ' + new_duration + 's;')
+  }
+
+  function show_hide_param(){
+    let element = document.getElementById("Parameters")
+    if (element.style.display === 'none') {
+      element.style.display = 'block'
+    } else {
+      element.style.display = 'none'
+    }
+  }
+</script>
+</head>
+
+<body onload="random_param()">
+
+<div id="boxex">
+  <div id="box1" class="moving_box" style="animation-duration: 7s;">
+    <p>breath</p>
+  </div>
+
+  <div id="box2" class="pulsing_box" style="animation-duration: 1.5s;">
+    <p>pulse</p>
+  </div>
+
+  <div id="box3" class="cpr_box" style="animation-duration: 0.5454s;">
+    <p>110 bpm<br/>CPR</p>
+  </div>
+</div>
+
+<br/>
+<div id="control" style="position:relative">
+  <input type="button" value="Show/hide parameters" onclick="show_hide_param()">
+  <input type="button" value="Randomize" onclick="random_param()">
+  <form id="Parameters" style="display:none">
+    Breaths per minute: <input type="text" id="T1" onchange="ch1();">
+    Pulses per minute: <input type="text" id="T2" onchange="ch2();">
+  </form>
+</div>
+</body>
